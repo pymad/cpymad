@@ -1,0 +1,5 @@
+
+pythonmadx.so:
+	gcc -shared -o libtabint.so -I/usr/include/madX -fPIC table_interface.c
+	cython pythonmadx.pyx
+	gcc -shared -o pythonmadx.so -I/usr/include/python2.7 -I/usr/include/madX -fPIC -lpython2.7 -lmadx libtabint.so pythonmadx.c
