@@ -1,0 +1,578 @@
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! 16-FEB-2009, M. Woodley ->SLAC;
+;!    Optics v4.1: device locations per visual inspection; add subroutine to;
+;!    define "relaxed" optics;
+;! 27-MAY-2008, M. Woodley ->SLAC;
+;!    Optics v4.0;
+;! 19-DEC-2007, M. Woodley ->SLAC;
+;!    Optics v3.8 ... extraction septa realigned; rematch geometry and optics;;
+;!    remove movers from QM16FF, QM15FF, QM14FF ... which QM_s have movers and;
+;!    which do not may change later;
+;! 18-JUL-2007, M. Woodley ->SLAC;
+;!    Optics v3.7;
+;! 14-MAR-2007, M. Woodley ->SLAC;
+;!    Turn off EXT sextupoles and retune FF sextupoles ... for simulations;
+;! 28-NOV-2006, M. Woodley ->SLAC;
+;!    Optics v3.6: A. Seryi_s "ATF2_V3_3_12" optics of 31-JUL-2006 with reduced;
+;!    U3224 aberration;
+;! 01-JUL-2006, M. Woodley ->SLAC;
+;!    Optics v3.5: B5/QD6 spacing adjustment per A. Seryi; change lengths of;
+;!    all sextupoles from 200 mm to 90 mm; simplify element definitions to;
+;!    facilitate translation to SAD (no inheritance);
+;! 26-MAY-2006, M. Woodley ->SLAC;
+;!    Optics v3.3: rematch after fixing EXT bug; new FF layout per A. Seryi and;
+;!    T. Okugi; per discussion at 9th ATF2 meeting: set drift distance from IP;
+;!    to entrance face of dump bend to 1.5 m; set dump bend "Z-length" to;
+;!    1.35 m; set drift distance from exit face of dump bend to entrance face;
+;!    of dump to 1.0 m;
+;! 26-APR-2006, M. Woodley ->SLAC;
+;!    Redesigned EXT;
+;! 02-FEB-2006, M. Woodley ->SLAC;
+;!    Remove chicane; set quad center spacing between QD12X and QM16 to 1.5 m;;
+;!    rematch;
+;! 25-JUL-2005, M. Woodley ->SLAC;
+;!    Rematch to modified extraction line diagnostics section;
+;! 03-JUN-2005, M. Woodley;
+;!    From A. Seryi_s ATFEXTRSHRTFF6.mad: 0.8 m rectangular bends; remove OC0;;
+;!    move OC1 away from SF1; match to new skew correction and emittance;
+;!    diagnostic section, minimizing the strengths the QMs; move some magnet;
+;!    definitions into ATF2_common.xsifxx ;
+;! ------------------------------------------------------------------------------;
+;
+;! global parameters;
+;
+  BXip  := 0.004;
+  BYip  := 0.0001;
+  DPXip := 0.139431518433;
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! dipoles;
+;! ------------------------------------------------------------------------------;
+;
+;! FF bends;
+;
+  AB5FF := -0.024947966607 ;!half-angle;
+  AB2FF := -0.015087937324 ;!half-angle;
+  AB1FF := -0.02690209037  ;!half-angle;
+;
+  LB5FF := ZBFF*AB5FF/SIN(AB5FF) ;!effective length;
+  LB2FF := ZBFF*AB2FF/SIN(AB2FF) ;!effective length;
+  LB1FF := ZBFF*AB1FF/SIN(AB1FF) ;!effective length;
+;
+  B5FFa : SBEND, L:=LB5FF/2, HGAP:=GBFF, ANGLE:=AB5FF, 
+                E1:=AB5FF, FINT:=0.5, FINTX:=0;
+  B5FFb : SBEND, L:=LB5FF/2, HGAP:=GBFF, ANGLE:=AB5FF, 
+                E2:=AB5FF, FINT:=0, FINTX:=0.5;
+  B2FFa : SBEND, L:=LB2FF/2, HGAP:=GBFF, ANGLE:=AB2FF, 
+                E1:=AB2FF, FINT:=0.5, FINTX:=0;
+  B2FFb : SBEND, L:=LB2FF/2, HGAP:=GBFF, ANGLE:=AB2FF, 
+                E2:=AB2FF, FINT:=0, FINTX:=0.5;
+  B1FFa : SBEND, L:=LB1FF/2, HGAP:=GBFF, ANGLE:=AB1FF, 
+                E1:=AB1FF, FINT:=0.5, FINTX:=0;
+  B1FFb : SBEND, L:=LB1FF/2, HGAP:=GBFF, ANGLE:=AB1FF, 
+                E2:=AB1FF, FINT:=0, FINTX:=0.5;
+;
+;! dump bend;
+;
+  ABDUMP := 10*RADDEG                 ;!half-angle;
+  LBDUMP := ZBSHIC*ABDUMP/SIN(ABDUMP) ;!effective length;
+  ;
+  BDUMPa : SBEND, L:=LBDUMP/2, HGAP:=GBSHIC, ANGLE:=ABDUMP, 
+                 E1:=ABDUMP, FINT:=0.5, FINTX:=0;
+  BDUMPb : SBEND, L:=LBDUMP/2, HGAP:=GBSHIC, ANGLE:=ABDUMP, 
+                 E2:=ABDUMP, FINT:=0, FINTX:=0.5;
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! quadrupoles;
+;! ------------------------------------------------------------------------------;
+;
+  KLQM16FF :=  0.582107167321 ;!normal=F;
+  KLQM15FF := -0.319467798559 ;!normal=D;
+  KLQM14FF := -1.120200550239 ;!normal=D;
+  KLQM13FF :=  0.910586171913 ;!normal=F;
+  KLQM12FF :=  0.335903388655 ;!normal=F;
+  KLQM11FF :=  0.0            ;!normal=D;
+  KLQD10FF := -0.290019331454;
+  KLQF9FF  :=  0.378649967733;
+  KLQD8FF  := -0.604355398609;
+  KLQF7FF  :=  0.55016183691;
+  KLQD6FF  := -0.602327211925;
+  KLQF5FF  :=  0.37605663431;
+  KLQD4FF  := -0.296792273617;
+  KLQF3FF  :=  0.552719873686;
+  KLQD2BFF := -0.198712968919;
+  KLQD2AFF := -0.289728096191;
+;
+  QM16FF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQM16FF/LQEA;
+  QM15FF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQM15FF/LQEA;
+  QM14FF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQM14FF/LQEA;
+  QM13FF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQM13FF/LQEA;
+  QM12FF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQM12FF/LQEA;
+  QM11FF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQM11FF/LQEA;
+  QD10BFF : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQD10FF/LQEA;
+  QD10AFF : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQD10FF/LQEA;
+  QF9BFF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQF9FF /LQEA;
+  QF9AFF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQF9FF /LQEA;
+  QD8FF   : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQD8FF /LQEA;
+  QF7FF   : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQF7FF /LQEA;
+  QD6FF   : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQD6FF /LQEA;
+  QF5BFF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQF5FF /LQEA;
+  QF5AFF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQF5FF /LQEA;
+  QD4BFF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQD4FF /LQEA;
+  QD4AFF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQD4FF /LQEA;
+  QF3FF   : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQF3FF /LQEA;
+  QD2BFF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=rQEA, K1:=KLQD2BFF/LQEA;
+  QD2AFF  : QUADRUPOLE, L:=LQEA/2, APERTURE:=RQEA, K1:=KLQD2AFF/LQEA;
+;
+;! final doublet;
+;
+  KLQF1FF :=  0.741787852156;
+  KLQD0FF := -1.36396800693;
+;
+  QF1FF : QUADRUPOLE, L:=LQC3/2, K1:=KLQF1FF/LQC3, APERTURE:=RQC3;
+  QD0FF : QUADRUPOLE, L:=LQC3/2, K1:=KLQD0FF/LQC3, APERTURE:=RQC3;
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! sextupoles;
+;! ------------------------------------------------------------------------------;
+;
+;! FF sextupoles;
+;
+  KLSF6FF :=  8.564581722445;
+  KLSF5FF := -0.790873090866;
+  KLSD4FF := 14.910111047195;
+;
+  SF6FF : SEXTUPOLE, L:=LSFF/2, APERTURE:=RSFF, K2:=KLSF6FF/LSFF;
+  SF5FF : SEXTUPOLE, L:=LSFF/2, APERTURE:=RSFF, K2:=KLSF5FF/LSFF;
+  SD4FF : SEXTUPOLE, L:=LSFF/2, APERTURE:=RSFF, K2:=KLSD4FF/LSFF;
+;
+;! final doublet sextupoles;
+;
+  KLSF1FF := -2.578006544939;
+  KLSD0FF :=  4.311879390944;
+;
+  SF1FF : SEXTUPOLE, L:=LSFD/2, APERTURE:=RSFD, K2:=KLSF1FF/LSFD;
+  SD0FF : SEXTUPOLE, L:=LSFD/2, APERTURE:=RSFD, K2:=KLSD0FF/LSFD;
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! drifts;
+;! ------------------------------------------------------------------------------;
+;
+  LL200 := 0.029-dLQEA;
+  LL201 := 1.30151;
+  LL202 := 1.30151;
+  LL203 := 1.30151;
+  LL204 := 1.30151;
+  LL205 := 1.40151;
+  LL206 := 1.30151;
+  LL207 := 0.70151;
+  LL208 := 1.10151;
+  LL209 := 0.410715984;
+  LL210 := 0.410715984;
+  LL211 := 1.60151;
+  LL212 := 1.70151;
+  LL213 := 0.444364710161;
+  LL214 := 0.644364710161;
+  LL215 := 1.60151;
+  LL216 := 0.410715984;
+  LL217 := 0.410715984;
+  LL218 := 1.10151;
+  LL219 := 0.410715984;
+  LL220 := 0.410715984;
+  LL221 := 1.544384870992;
+  LL222 := 0.444384870992;
+  LL223 := 0.444359535201;
+  LL224 := 0.444359535201;
+  LL225 := 1.50151;
+  LL226 := 4.725755;
+  LL227 := 0.2875;
+  LL228 := 0.5025;
+  LL229 := 0.2875;
+  LL230 := 0.9875;
+;
+  L200 : DRIFT, L:=LL200;
+  L201 : DRIFT, L:=LL201;
+  L202 : DRIFT, L:=LL202;
+  L203 : DRIFT, L:=LL203;
+  L204 : DRIFT, L:=LL204;
+  L205 : DRIFT, L:=LL205;
+  L206 : DRIFT, L:=LL206;
+  L207 : DRIFT, L:=LL207;
+  L208 : DRIFT, L:=LL208;
+  L209 : DRIFT, L:=LL209;
+  L210 : DRIFT, L:=LL210;
+  L211 : DRIFT, L:=LL211;
+  L212 : DRIFT, L:=LL212;
+  L213 : DRIFT, L:=LL213;
+  L214 : DRIFT, L:=LL214;
+  L215 : DRIFT, L:=LL215;
+  L216 : DRIFT, L:=LL216;
+  L217 : DRIFT, L:=LL217;
+  L218 : DRIFT, L:=LL218;
+  L219 : DRIFT, L:=LL219;
+  L220 : DRIFT, L:=LL220;
+  L221 : DRIFT, L:=LL221;
+  L222 : DRIFT, L:=LL222;
+  L223 : DRIFT, L:=LL223;
+  L224 : DRIFT, L:=LL224;
+  L225 : DRIFT, L:=LL225;
+  L226 : DRIFT, L:=LL226;
+  L227 : DRIFT, L:=LL227;
+  L228 : DRIFT, L:=LL228;
+  L229 : DRIFT, L:=LL229;
+  L230 : DRIFT, L:=LL230;
+;
+;! post-IP;
+;
+  LL301 := 1.5 ;!IP to entrance face of dump bend;
+  LL302 := 2.0 ;!exit face of dump bend to entrance face of dump;
+  LDUMP := 2.3 ;!full length of dump;
+;
+  L301  : DRIFT, L:=LL301;
+  L302  : DRIFT, L:=LL302;
+  DUMPh : DRIFT, L:=LDUMP/2;
+;
+;! drifts for diagnostic and correction devices;
+;
+  L201c : DRIFT, L:=0.319-ZV1FF->L/2-QM15FF->L;
+  L201b : DRIFT, L:=0.259-ZH1FF->L/2-ZV1FF->L/2;
+  L201a : DRIFT, L:=L201->L-(ZH1FF->L+L201b->L+ZV1FF->L+L201c->L);
+  L202a : DRIFT, L:=0.029-dLQEA;
+  L202b : DRIFT, L:=L202->L-L202a->L;
+  L203a : DRIFT, L:=0.029-dLQEA;
+  L203c : DRIFT, L:=0.4545-dLQEA;
+  L203b : DRIFT, L:=L203->L-(L203a->L+L203c->L);
+  L204a : DRIFT, L:=0.029-dLQEA;
+  L204b : DRIFT, L:=L204->L-L204a->L;
+  L205a : DRIFT, L:=0.029-dLQEA;
+  L205b : DRIFT, L:=0.6093;
+  L205c : DRIFT, L:=L205->L-(L205a->L+L205b->L);
+  L206a : DRIFT, L:=0.029-dLQEA;
+  L206b : DRIFT, L:=L206->L-L206a->L;
+  L207c : DRIFT, L:=0.214-dLQEA;
+  L207a : DRIFT, L:=0.029-dLQEA;
+  L207b : DRIFT, L:=L207->L-(L207a->L+L207c->L);
+  L208a : DRIFT, L:=0.029-dLQEA;
+  L208b : DRIFT, L:=0.289;
+  L208c : DRIFT, L:=L208->L-(L208a->L+L208b->L);
+  L209a : DRIFT, L:=0.029-dLQEA;
+  L209b : DRIFT, L:=L209->L-L209a->L;
+  L210a : DRIFT, L:=0.105-dLSFF;
+  L210b : DRIFT, L:=L210->L-L210a->L;
+  L211a : DRIFT, L:=0.029-dLQEA;
+  L211b : DRIFT, L:=L211->L-L211a->L;
+  L212a : DRIFT, L:=0.029-dLQEA;
+  L212b : DRIFT, L:=L212->L-L212a->L;
+  L213a : DRIFT, L:=0.029-dLQEA;
+  L213b : DRIFT, L:=L213->L-L213a->L;
+  L215a : DRIFT, L:=0.029-dLQEA;
+  L215b : DRIFT, L:=L215->L-L215a->L;
+  L216a : DRIFT, L:=0.029-dLQEA;
+  L216b : DRIFT, L:=L216->L-L216a->L;
+  L217a : DRIFT, L:=0.105-dLSFF;
+  L217b : DRIFT, L:=L217->L-L217a->L;
+  L218a : DRIFT, L:=0.029-dLQEA;
+  L218b : DRIFT, L:=L218->L-L218a->L;
+  L219a : DRIFT, L:=0.029-dLQEA;
+  L219b : DRIFT, L:=L219->L-L219a->L;
+  L220a : DRIFT, L:=0.105-dLSFF;
+  L220b : DRIFT, L:=L220->L-L220a->L;
+  L221a : DRIFT, L:=0.029-dLQEA;
+  L221b : DRIFT, L:=L221->L-L221a->L;
+  L223a : DRIFT, L:=0.029-dLQEA;
+  L223b : DRIFT, L:=L223->L-L223a->L;
+  L224b : DRIFT, L:=0.213-dLQEA;
+  L224a : DRIFT, L:=L224->L-L224b->L;
+  L225a : DRIFT, L:=0.029-dLQEA;
+  L225b : DRIFT, L:=L225->L-L225a->L;
+  L226a : DRIFT, L:=0.029-dLQEA;
+  L226d : DRIFT, L:=0.148-SF1FF->L;
+  L226c : DRIFT, L:=0.646;
+  L226b : DRIFT, L:=L226->L-(L226a->L+L226c->L+L226d->L);
+  L228a : DRIFT, L:=0.348-QF1FF->L;
+  L228c : DRIFT, L:=0.148-SD0FF->L;
+  L228b : DRIFT, L:=L228->L-(L228a->L+L228c->L);
+  L230a : DRIFT, L:=0.348-QD0FF->L;
+  L230b : DRIFT, L:=L230->L-L230a->L;
+  L301a : DRIFT, L:=0.422;
+  L301b : DRIFT, L:=0.203 ;!to short-pipe QBPM "sensor point";
+  L301c : DRIFT, L:=0.302;
+  L301d : DRIFT, L:=L301->L-(L301a->L+L301b->L+L301c->L);
+  L302a : DRIFT, L:=1.313-LBDUMP/2;
+  L302b : DRIFT, L:=0.146;
+  L302c : DRIFT, L:=L302->L-(L302a->L+L302b->L);
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! diagnostic and correction devices;
+;! ------------------------------------------------------------------------------;
+;
+;! dipole correctors (horizontal);
+;
+  ZH1FF : HKICKER, L:=LNKKCH ;!pulse-to-pulse feedback;
+;
+;! dipole correctors (vertical);
+;
+  ZV1FF : VKICKER, L:=LTecno58284 ;!pulse-to-pulse feedback;
+;
+;! FFTB x/y/roll magnet movers;
+;
+  AQM16FF  : MARKER;
+  AQM15FF  : MARKER;
+  AQM14FF  : MARKER;
+  AQM13FF  : MARKER;
+  AQM12FF  : MARKER;
+  AQM11FF  : MARKER;
+  AQD10BFF : MARKER;
+  AQD10AFF : MARKER;
+  AQF9BFF  : MARKER;
+  ASF6FF   : MARKER;
+  AQF9AFF  : MARKER;
+  AQD8FF   : MARKER;
+  AQF7FF   : MARKER;
+  AQD6FF   : MARKER;
+  AQF5BFF  : MARKER;
+  ASF5FF   : MARKER;
+  AQF5AFF  : MARKER;
+  AQD4BFF  : MARKER;
+  ASD4FF   : MARKER;
+  AQD4AFF  : MARKER;
+  AQF3FF   : MARKER;
+  AQD2BFF  : MARKER;
+  AQD2AFF  : MARKER;
+  ASF1FF   : MARKER;
+  AQF1FF   : MARKER;
+  ASD0FF   : MARKER;
+  AQD0FF   : MARKER;
+;
+;! special mover for feedback C-band BPM MFB2FF;
+;
+  AFB2FF : MARKER ;!not installed;
+;
+;! horizontal/vertical sweeper (Tokyo University / Mitsubishi);
+;! (Lcore:= 30 mm, Leff:= 166.2 mm, Imax:= 5 A, dB/dI:= 5.49 G/A);
+;
+ ;!HSWEEP : HKICKER;
+ ;!VSWEEP : VKICKER;
+ ;!SWEEP  : LINE:=(HSWEEP,VSWEEP);
+ ;!SWEEP  : MARKER ;!not installed;
+;
+;! stripline BPMs;
+;
+  MFB1FF : MONITOR ;!feedback (FD-phase) ... not installed;
+  MDUMP  : MONITOR;
+;
+;! cavity BPMs;
+;
+  MQM16FF  : MONITOR ;!C-band;
+  MQM15FF  : MONITOR ;!C-band;
+  MQM14FF  : MONITOR ;!C-band;
+  MFB2FF   : MONITOR ;!C-band; feedback (IP-phase) ... not installed;
+  MQM13FF  : MONITOR ;!C-band;
+  MQM12FF  : MONITOR ;!C-band;
+  MQM11FF  : MONITOR ;!C-band;
+  MQD10BFF : MONITOR ;!C-band;
+  MQD10AFF : MONITOR ;!C-band;
+  MQF9BFF  : MONITOR ;!C-band;
+  MSF6FF   : MONITOR ;!C-band;
+  MQF9AFF  : MONITOR ;!C-band;
+  MQD8FF   : MONITOR ;!C-band;
+  MQF7FF   : MONITOR ;!C-band;
+  MQD6FF   : MONITOR ;!C-band;
+  MQF5BFF  : MONITOR ;!C-band;
+  MSF5FF   : MONITOR ;!C-band;
+  MQF5AFF  : MONITOR ;!C-band;
+  MQD4BFF  : MONITOR ;!C-band;
+  MSD4FF   : MONITOR ;!C-band;
+  MQD4AFF  : MONITOR ;!C-band;
+  MQF3FF   : MONITOR ;!C-band;
+  MQD2BFF  : MONITOR ;!C-band;
+  MQD2AFF  : MONITOR ;!C-band;
+  QBPM24FF : MONITOR ;!C-band;
+  MSF1FF   : MONITOR ;!S-band;
+  MQF1FF   : MONITOR ;!S-band;
+  MSD0FF   : MONITOR ;!S-band;
+  MQD0FF   : MONITOR ;!S-band;
+ ;!"M12IP" : MONITOR ;!2-cavity IP BPM ... not installed
+  MPIP     : MONITOR ;!C-band (short pipe);
+;
+;! reference (monopole) cavities (for cavity BPMs);
+;
+  MREF3FF : MARKER ;!C-band (for QBPMs);
+ ;!MREF2FF : MARKER ;!C-band (for QBPMs) ... not installed;
+  MREF1FF : MARKER ;!C-band (for QBPMs);
+;
+;! screen monitors;
+;
+  MS2FF : MONITOR ;!length ~0.18;
+  MS1FF : MONITOR ;!length ~0.18;
+  MS1IP : MONITOR ;!part of Shintake monitor;
+  MSPIP : MONITOR ;!length ~0.18;
+;
+;! filament wire scanners;
+;
+  MW1IP : MONITOR ;!length ~0.2 (two forks: 45deg tungsten, 90deg carbon filament);
+;
+;! beam size monitors (BSMs);
+;
+ ;!MBS2IP : MONITOR ;!nano pattern (length ~0.18) ... not installed;
+  MBS1IP : MARKER ;!Shintake monitor (laser interferometer; length ~0.2);
+;
+;! beam charge/current monitors;
+;
+  ICTDUMP : MARKER ;!ICT;
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! marker points;
+;! ------------------------------------------------------------------------------;
+;
+  BEGFF  : MARKER;
+  IP     : MARKER;
+  ENDFF  : MARKER;
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! beamlines;
+;! ------------------------------------------------------------------------------;
+;! FFs   : simple Final Focus;
+;! FFRs  : simple Final Focus (reversed);
+;! FF    : complete Final Focus;
+;! POSTs : simple post-IP line;
+;! POST  : complete post-IP line;
+;! ------------------------------------------------------------------------------;
+;
+  FFs : LINE:=(BEGFF,L200,
+    QM16FF,QM16FF,L201,
+    QM15FF,QM15FF,L202,
+    QM14FF,QM14FF,L203,
+    QM13FF,QM13FF,L204,
+    QM12FF,QM12FF,L205,
+    QM11FF,QM11FF,L206,
+    QD10BFF,QD10BFF,L207,
+    QD10AFF,QD10AFF,L208,
+    QF9BFF,QF9BFF,L209,
+    SF6FF,SF6FF,L210,
+    QF9AFF,QF9AFF,L211,
+    QD8FF,QD8FF,L212,
+    QF7FF,QF7FF,L213,
+    B5FFa,B5FFb,L214,
+    QD6FF,QD6FF,L215,
+    QF5BFF,QF5BFF,L216,
+    SF5FF,SF5FF,L217,
+    QF5AFF,QF5AFF,L218,
+    QD4BFF,QD4BFF,L219,
+    SD4FF,SD4FF,L220,
+    QD4AFF,QD4AFF,L221,
+    B2FFa,B2FFb,L222,
+    QF3FF,QF3FF,L223,
+    B1FFa,B1FFb,L224,
+    QD2BFF,QD2BFF,L225,
+    QD2AFF,QD2AFF,L226,
+    SF1FF,SF1FF,L227,
+    QF1FF,QF1FF,L228,
+    SD0FF,SD0FF,L229,
+    QD0FF,QD0FF,L230,
+    IP,ENDFF);
+;
+  FFRs : LINE:=(ENDFF,IP,
+    L230,QD0FF,QD0FF,
+    L229,SD0FF,SD0FF,
+    L228,QF1FF,QF1FF,
+    L227,SF1FF,SF1FF,
+    L226,QD2AFF,QD2AFF,
+    L225,QD2BFF,QD2BFF,
+    L224,B1FFa,B1FFb,
+    L223,QF3FF,QF3FF,
+    L222,B2FFa,B2FFb,
+    L221,QD4AFF,QD4AFF,
+    L220,SD4FF,SD4FF,
+    L219,QD4BFF,QD4BFF,
+    L218,QF5AFF,QF5AFF,
+    L217,SF5FF,SF5FF,
+    L216,QF5BFF,QF5BFF,
+    L215,QD6FF,QD6FF,
+    L214,B5FFa,B5FFb,
+    L213,QF7FF,QF7FF,
+    L212,QD8FF,QD8FF,
+    L211,QF9AFF,QF9AFF,
+    L210,SF6FF,SF6FF,
+    L209,QF9BFF,QF9BFF,
+    L208,QD10AFF,QD10AFF,
+    L207,QD10BFF,QD10BFF,
+    L206,QM11FF,QM11FF,
+    L205,QM12FF,QM12FF,
+    L204,QM13FF,QM13FF,
+    L203,QM14FF,QM14FF,
+    L202,QM15FF,QM15FF,
+    L201,QM16FF,QM16FF,
+    L200,BEGFF);
+;
+  POSTs : LINE:=(L301,BDUMPa,BDUMPb,L302,DUMPh,DUMPh);
+;
+  BL200 : LINE:=(MQM16FF,L200);
+  BL201 : LINE:=(L201a,ZH1FF,L201b,ZV1FF,L201c);
+  BL202 : LINE:=(L202a,MQM15FF,L202b);
+  BL203 : LINE:=(L203a,MQM14FF,L203b,MFB2FF,AFB2FF,L203c);
+  BL204 : LINE:=(L204a,MQM13FF,L204b);
+  BL205 : LINE:=(L205a,MQM12FF,L205b,MFB1FF,L205c);
+  BL206 : LINE:=(L206a,MQM11FF,L206b);
+  BL207 : LINE:=(L207a,MQD10BFF,L207b,MREF3FF,L207c);
+  BL208 : LINE:=(L208a,MQD10AFF,L208b,MS1FF,L208c);
+  BL209 : LINE:=(L209a,MQF9BFF,L209b);
+  BL210 : LINE:=(L210a,MSF6FF,L210b);
+  BL211 : LINE:=(L211a,MQF9AFF,L211b);
+  BL212 : LINE:=(L212a,MQD8FF,L212b);
+  BL213 : LINE:=(L213a,MQF7FF,L213b);
+  BL215 : LINE:=(L215a,MQD6FF,L215b);
+  BL216 : LINE:=(L216a,MQF5BFF,L216b);
+  BL217 : LINE:=(L217a,MSF5FF,L217b);
+  BL218 : LINE:=(L218a,MQF5AFF,L218b);
+  BL219 : LINE:=(L219a,MQD4BFF,L219b);
+  BL220 : LINE:=(L220a,MSD4FF,L220b);
+  BL221 : LINE:=(L221a,MQD4AFF,L221b);
+  BL223 : LINE:=(L223a,MQF3FF,L223b);
+  BL224 : LINE:=(L224a,MREF1FF,L224b);
+  BL225 : LINE:=(L225a,MQD2BFF,L225b);
+  BL226 : LINE:=(L226a,MQD2AFF,L226b,MS2FF,L226c,MSF1FF,L226d);
+  BL228 : LINE:=(L228a,MQF1FF,L228b,MSD0FF,L228c);
+  BL230 : LINE:=(L230a,MQD0FF,L230b,MS1IP,MBS1IP);
+;
+  FF : LINE:=(BEGFF,BL200,
+    QM16FF,AQM16FF,QM16FF,BL201,
+    QM15FF,AQM15FF,QM15FF,BL202,
+    QM14FF,AQM14FF,QM14FF,BL203,
+    QM13FF,AQM13FF,QM13FF,BL204,
+    QM12FF,AQM12FF,QM12FF,BL205,
+    QM11FF,AQM11FF,QM11FF,BL206,
+    QD10BFF,AQD10BFF,QD10BFF,BL207,
+    QD10AFF,AQD10AFF,QD10AFF,BL208,
+    QF9BFF,AQF9BFF,QF9BFF,BL209,
+    SF6FF,ASF6FF,SF6FF,BL210,
+    QF9AFF,AQF9AFF,QF9AFF,BL211,
+    QD8FF,AQD8FF,QD8FF,BL212,
+    QF7FF,AQF7FF,QF7FF,BL213,
+    B5FFa,B5FFb,L214,
+    QD6FF,AQD6FF,QD6FF,BL215,
+    QF5BFF,AQF5BFF,QF5BFF,BL216,
+    SF5FF,ASF5FF,SF5FF,BL217,
+    QF5AFF,AQF5AFF,QF5AFF,BL218,
+    QD4BFF,AQD4BFF,QD4BFF,BL219,
+    SD4FF,ASD4FF,SD4FF,BL220,
+    QD4AFF,AQD4AFF,QD4AFF,BL221,
+    B2FFa,B2FFb,L222,
+    QF3FF,AQF3FF,QF3FF,BL223,
+    B1FFa,B1FFb,BL224,
+    QD2BFF,AQD2BFF,QD2BFF,BL225,
+    QD2AFF,AQD2AFF,QD2AFF,BL226,
+    SF1FF,ASF1FF,SF1FF,L227,
+    QF1FF,AQF1FF,QF1FF,BL228,
+    SD0FF,ASD0FF,SD0FF,L229,
+    QD0FF,AQD0FF,QD0FF,BL230,
+    IP,ENDFF);
+;
+  BL301 : LINE:=(L301a,MW1IP,L301b,MPIP,L301c,MSPIP,L301d);
+  BL302 : LINE:=(L302a,MDUMP,L302b,ICTDUMP,L302c);
+;
+  POST : LINE:=(BL301,BDUMPa,BDUMPb,BL302,DUMPh,DUMPh);
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;
+  ;

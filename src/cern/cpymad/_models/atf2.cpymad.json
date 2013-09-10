@@ -1,0 +1,84 @@
+{
+  "atf2": {
+    "real": true,
+    "extends": [],
+    "dbdirs": [
+      "/afs/cern.ch/eng/sl/lintrack/",
+      "/afs/cern.ch/user/r/rtomas/lintrack/"
+    ],
+    "path-offsets": {
+      "repository-offset": "CLICr/ATF2/",
+      "resource-offset": "atf2/"
+    },
+    "beams": {
+      "atf2_defaultbeam": {
+        "particle": "electron",
+        "sequence": "v4.1_Optimized",
+        "energy": 1.3,
+        "ex": 2.0E-9,
+        "eyn": 3.0E-8,
+        "npart": 2.0E10,
+        "sigt": 8.0E-3,
+        "sige": 0.8E-3,
+        "radiate": false
+      }
+    },
+    "init-files": [
+      {
+        "path": "ATF2-v4.1_Optimized/ATF2_common.xsifx"
+      },
+      {
+        "path": "ATF2-v4.1_Optimized/EXT_v4.1.xsifx"
+      },
+      {
+        "path": "ATF2-v4.1_Optimized/FF_v4.1.xsifx"
+      },
+      {
+        "location": "RESOURCE",
+        "path": "init_lines.madx"
+      },
+      {
+        "location": "RESOURCE",
+        "path": "matchline.madx"
+      }
+    ],
+
+    "default-sequence": "v4.1_Optimized",
+    "sequences": {
+      "v4.1_Optimized": {
+        "ranges": {
+          "ALL": {
+            "madx-range": {
+              "last": "#e",
+              "first": "#s"
+            },
+            "twiss-initial-conditions": {
+              "default": {
+                "bety": "12.765465469515",
+                "betx": "3.40994117909",
+                "alfy": "-1.952662125543",
+                "alfx": "0.534878655824",
+                "closed-orbit": false
+              }
+            },
+            "default-twiss": "default"
+          }
+        },
+        "beam": "atf2_defaultbeam",
+        "default-range": "ALL"
+      }
+    },
+    "default-optic": "v4.1_Optimized",
+    "optics": {
+      "v4.1_Optimized": {
+        "init-files": [
+          {
+            "parse": "STRENGTHS",
+            "path": "ATF2-v4.1_Optimized/kl_35"
+          }
+        ],
+        "overlay": true
+      }
+    }
+  }
+}

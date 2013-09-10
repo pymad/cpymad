@@ -1,0 +1,5 @@
+  ATF2s  : LINE:=(EXTs,FFs);
+  ATF2ds : LINE:=(EXTs,FFs,POSTs);
+  ATF2   : LINE:=(EXT,FF);
+  ATF2d  : LINE:=(EXT,FF,POST);
+  myATF2 : LINE=(MLinv,EXT,FFs);

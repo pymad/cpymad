@@ -1,0 +1,738 @@
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! 16-FEB-2009, M. Woodley ->SLAC;
+;!    Optics v4.1: device locations per visual inspection;
+;! 27-MAY-2008, M. Woodley ->SLAC;
+;!    Optics v4.0 ... FONT devices; BPM names; keep QK2X and QK3X in the deck,;
+;!    even though they won_t be installed at startup ... caveat emptor;!;
+;! 19-DEC-2007, M. Woodley ->SLAC;
+;!    Optics v3.8 ... extraction septa realigned; rematch geometry and optics;
+;! 18-JUL-2007, M. Woodley ->SLAC;
+;!    Optics v3.7;
+;! 14-MAR-2007, M. Woodley ->SLAC;
+;!    Turn off EXT sextupoles and retune FF sextupoles ... for simulations;
+;! 16-DEC-2006, M. Woodley ->SLAC;
+;!    Optics v3.6: add skew quadrupoles for vertical dispersion correction;
+;! 01-JUL-2006, M. Woodley ->SLAC;
+;!    Optics v3.5: remove Q4X and associated BPM; change stripline BPMs in;
+;!    emittance measurement section to QBPMs, per Y. Honda; assign final element;
+;!    names; add all planned beamline devices; clean up;
+;! 07-JUN-2005, M. Woodley ->SLAC;
+;!    Optics v3.4: simplify element definitions to facilitate translation to SAD;
+;!    (no inheritance; no definitions containing explicit references to the;
+;!    attributes of other elements); add 2 sextupoles for vertical chromaticity;
+;!    correction; new vertical dispersion correction scheme;
+;! 26-MAY-2005, M. Woodley ->SLAC;
+;!    Optics v3.3: fix mistake in drift distance between BS2X and BS3X (should;
+;!    be 0.2 m ... was 0.1 m); add correctors and stripline BPMs for;
+;!    performance simulations; add 2 air-core skew quadrupoles (ECUBEskew) for;
+;!    coupling compensation of vertical dispersion knobs;
+;! 26-APR-2006, M. Woodley ->SLAC;
+;!    EXT v3.1; rematch to short ("Optimal 2") diagnostic section; make space;
+;!    for shield wall penetration;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! dipoles;
+;! ------------------------------------------------------------------------------;
+;
+;! kickers (SLAC "epoxy" type);
+;
+  Lkick := 0.2500010416697 ;!half-length;
+  Akick := 0.0025          ;!half-angle;
+  Gkick := 0.00635         ;!0.5 inch full gap height;
+;
+  KEX1a : SBEND, L:=Lkick, HGAP:=Gkick, ANGLE:=Akick, 
+                E1:=0, FINT:=0.5, FINTX:=0;
+  KEX1b : SBEND, L:=Lkick, HGAP:=Gkick, ANGLE:=Akick, 
+                E2:=2*Akick, FINT:=0, FINTX:=0.5;
+  KEX2a : SBEND, L:=Lkick, HGAP:=Gkick, ANGLE:=Akick, 
+                E1:=2*Akick, FINT:=0.5, FINTX:=0;
+  KEX2b : SBEND, L:=Lkick, HGAP:=Gkick, ANGLE:=Akick, 
+                E2:=0, FINT:=0, FINTX:=0.5;
+;
+;! off-axis DR quads;
+;! (NOTE: original QM7R (Tokin-3393) replaced by Tokin-3581; Leff changed from;
+;!        0.078907 to 0.084285 (~7%); new Leff used here, surrounding drift;
+;!        lengths adjusted, QM7R bend angle kept constant, no geometry rematch);
+;
+  AQM6Rx :=  0.23109657E-02 ;!half-angle;
+  AQM7Rx := -0.45873988E-02 ;!half-angle;
+;
+  LQM6Rx := LQHitachi4 *(AQM6Rx/SIN(AQM6Rx))+0.000004 ;!Hitachi-4 (0.18 core);
+  LQM7Rx := LQTokin3581*(AQM7Rx/SIN(AQM7Rx))+0.000004 ;!Tokin-3581 (0.06 core);
+;
+  KLQM6R := -0.71174 ;!drdsgn07Dec03;
+  KLQM7R :=  0.40822 ;!drdsgn07Dec03;
+;
+  QM6Rx : SBEND, L:=LQM6Rx/2, ANGLE:=AQM6Rx, K1:=KLQM6R/LQM6Rx, 
+                FINT:=0, FINTX:=0;
+  QM7Rx : SBEND, L:=LQM7Rx/2, ANGLE:=AQM7Rx, K1:=KLQM7R/LQM7Rx, 
+                FINT:=0, FINTX:=0;
+;
+;! septa;
+;
+  Asep1 := 0.0140178327098 ;!half-angle;
+  Asep2 := 0.0371716830661 ;!half-angle;
+  Asep3 := 0.1175110129077 ;!half-angle;
+  Gsep  := 0.016;
+;
+  BS1Xa : SBEND, L:=0.3, HGAP:=Gsep, ANGLE:=Asep1, 
+                E1:=0, FINT:=0.5, FINTX:=0;
+  BS1Xb : SBEND, L:=0.3, HGAP:=Gsep, ANGLE:=Asep1, 
+                E2:=0, FINT:=0, FINTX:=0.5;
+  BS2Xa : SBEND, L:=0.4, HGAP:=Gsep, ANGLE:=Asep2, 
+                E1:=0, FINT:=0.5, FINTX:=0;
+  BS2Xb : SBEND, L:=0.4, HGAP:=Gsep, ANGLE:=Asep2, 
+                E2:=0, FINT:=0, FINTX:=0.5;
+  BS3Xa : SBEND, L:=0.5, HGAP:=Gsep, ANGLE:=Asep3, 
+                E1:=0, FINT:=0.5, FINTX:=0;
+  BS3Xb : SBEND, L:=0.5, HGAP:=Gsep, ANGLE:=Asep3, 
+                E2:=0, FINT:=0, FINTX:=0.5;
+;
+;! inflector bends;
+;
+  Abh1 := +0.0941996781                              ;!half-angle;
+  Abh2 := -0.0941996781                              ;!half-angle;
+  Abh3 := -(Asep1+Asep2+Asep3+AQM6Rx+AQM7Rx+2*Akick) ;!half-angle;
+;
+  K2BH1X := (2*Abh1)*K2BSHIH;
+  K2BH2X := (2*Abh2)*K2BSHIH;
+;
+  BH1Xa : SBEND, L:=ZBSHIH/2, HGAP:=GBSHIH, ANGLE:=Abh1, K2:=K2BH1X, 
+                E1:=0, FINT:=0.5, FINTX:=0;
+  BH1Xb : SBEND, L:=ZBSHIH/2, HGAP:=GBSHIH, ANGLE:=Abh1, K2:=K2BH1X, 
+                E2:=0, FINT:=0, FINTX:=0.5;
+  BH2Xa : SBEND, L:=ZBSHIH/2, HGAP:=GBSHIH, ANGLE:=Abh2, K2:=K2BH2X, 
+                E1:=0, FINT:=0.5, FINTX:=0;
+  BH2Xb : SBEND, L:=ZBSHIH/2, HGAP:=GBSHIH, ANGLE:=Abh2, K2:=K2BH2X, 
+                E2:=0, FINT:=0, FINTX:=0.5;
+  BH3Xa : SBEND, L:=ZBSHIC/2, HGAP:=GBSHIC, ANGLE:=Abh3, 
+                E1:=0, FINT:=0.5, FINTX:=0;
+  BH3Xb : SBEND, L:=ZBSHIC/2, HGAP:=GBSHIC, ANGLE:=Abh3, 
+                E2:=0, FINT:=0, FINTX:=0.5;
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! quadrupoles;
+;! ------------------------------------------------------------------------------;
+;
+;! inflector;
+;
+  KLQF1X  :=  1.07348422932;
+  KLQD2X  := -0.941224656296;
+  KLQF3X  :=  0.669156110054;
+  KLQF4X  :=  0.680204174589;
+  KLQD5X  := -0.926978428159;
+  KLQF6X  :=  1.128310169236;
+  KLQF7X  :=  0.389515329321;
+  KLQD8X  := -0.589621808552;
+;
+  QF1X : QUADRUPOLE, L:=LQHitachi5/2,  APERTURE:=RQHitachi5,  K1:=KLQF1X/LQHitachi5;
+  QD2X : QUADRUPOLE, L:=LQHitachi5/2,  APERTURE:=RQHitachi5,  K1:=KLQD2X/LQHitachi5;
+  QF3X : QUADRUPOLE, L:=LQHitachi5/2,  APERTURE:=RQHitachi5,  K1:=KLQF3X/LQHitachi5;
+  QF4X : QUADRUPOLE, L:=LQHitachi5/2,  APERTURE:=RQHitachi5,  K1:=KLQF4X/LQHitachi5;
+  QD5X : QUADRUPOLE, L:=LQHitachi5/2,  APERTURE:=RQHitachi5,  K1:=KLQD5X/LQHitachi5;
+  QF6X : QUADRUPOLE, L:=LQHitachi5/2,  APERTURE:=RQHitachi5,  K1:=KLQF6X/LQHitachi5;
+  QF7X : QUADRUPOLE, L:=LQHitachi2/2,  APERTURE:=RQHitachi2,  K1:=KLQF7X/LQHitachi2;
+  QD8X : QUADRUPOLE, L:=LQHitachi5/2,  APERTURE:=RQHitachi5,  K1:=KLQD8X/LQHitachi5;
+;
+;! dummy quadrupoles for skew correction / diagnostic section matching;
+;
+  KLQF90  :=  1.0233313538;
+  KLQD90  := -KLQF90;
+  KLQF180 :=  1.368238897325;
+  KLQD180 := -1.015436469912;
+  KLQFw   :=  0.305157098259;
+  KLQDw   := -KLQFw;
+;
+  QF90X  : QUADRUPOLE, L:=LQEA/2,       APERTURE:=RQEA,       K1:=KLQF90/LQEA;
+  QD90X  : QUADRUPOLE, L:=LQEA/2,       APERTURE:=RQEA,       K1:=KLQD90/LQEA;
+  QF180X : QUADRUPOLE, L:=LQHitachi4/2, APERTURE:=RQHitachi4, K1:=KLQF180/LQHitachi4;
+  QD180X : QUADRUPOLE, L:=LQHitachi4/2, APERTURE:=RQHitachi4, K1:=KLQD180/LQHitachi4;
+  QFwX   : QUADRUPOLE, L:=LQHitachi2/2, APERTURE:=RQHitachi2, K1:=KLQFw/LQHitachi2;
+  QDwX   : QUADRUPOLE, L:=LQHitachi2/2, APERTURE:=RQHitachi2, K1:=KLQDw/LQHitachi2;
+;
+;! skew correction / diagnostic section;
+;
+  KLQF9X  :=  0.735408941061;
+  KLQD10X := -1.023596398709 ;!KLQD90;
+  KLQF11X :=  KLQF90;
+  KLQD12X :=  KLQD90;
+  KLQF13X :=  KLQF180;
+  KLQD14X :=  KLQD180;
+  KLQF15X :=  KLQF180;
+  KLQD16X :=  KLQD90;
+  KLQF17X :=  KLQF90;
+  KLQD18X := -0.686072135611 ;!KLQDw;
+  KLQF19X :=  0.655166040943 ;!KLQFw;
+  KLQD20X := -0.302269728416 ;!KLQDw;
+  KLQF21X :=  0.301425825497 ;!KLQFw;
+;
+  QF9X  : QUADRUPOLE, L:=LQHitachi5/2, APERTURE:=RQHitachi5, K1:=KLQF9X/LQHitachi5;
+  QD10X : QUADRUPOLE, L:=LQEA/2,       APERTURE:=RQEA,       K1:=KLQD10X/LQEA;
+  QF11X : QUADRUPOLE, L:=LQEA/2,       APERTURE:=RQEA,       K1:=KLQF11X/LQEA;
+  QD12X : QUADRUPOLE, L:=LQEA/2,       APERTURE:=RQEA,       K1:=KLQD12X/LQEA;
+  QF13X : QUADRUPOLE, L:=LQHitachi4/2, APERTURE:=RQHitachi4, K1:=KLQF13X/LQHitachi4;
+  QD14X : QUADRUPOLE, L:=LQHitachi4/2, APERTURE:=RQHitachi4, K1:=KLQD14X/LQHitachi4;
+  QF15X : QUADRUPOLE, L:=LQHitachi4/2, APERTURE:=RQHitachi4, K1:=KLQF15X/LQHitachi4;
+  QD16X : QUADRUPOLE, L:=LQEA/2,       APERTURE:=RQEA,       K1:=KLQD16X/LQEA;
+  QF17X : QUADRUPOLE, L:=LQEA/2,       APERTURE:=RQEA,       K1:=KLQF17X/LQEA;
+  QD18X : QUADRUPOLE, L:=LQEA/2,       APERTURE:=RQEA,       K1:=KLQD18X/LQEA;
+  QF19X : QUADRUPOLE, L:=LQEA/2,       APERTURE:=RQEA,       K1:=KLQF19X/LQEA;
+  QD20X : QUADRUPOLE, L:=LQHitachi2/2, APERTURE:=RQHitachi2, K1:=KLQD20X/LQHitachi2;
+  QF21X : QUADRUPOLE, L:=LQHitachi2/2, APERTURE:=RQHitachi2, K1:=KLQF21X/LQHitachi2;
+;
+;! skew quadrupoles;
+;! (NOTE: QK2X and QK3X are not installed);
+;
+  KLQSnX := 0 ;!1.E-6;
+  KLQS1X := KLQSnX;
+  KLQS2X := KLQSnX;
+  KLQK1X := 0 ;!1.E-6;
+  KLQK2X := 0 ;!1.E-6;
+  KLQK3X := 0 ;!1.E-6;
+  KLQK4X := 0 ;!1.E-6;
+;
+  QS1X : QUADRUPOLE, L:=LQIDXskew/2, APERTURE:=RQIDXskew, TILT, K1:=KLQS1X/LQIDXskew;
+  QS2X : QUADRUPOLE, L:=LQIDXskew/2, APERTURE:=RQIDXskew, TILT, K1:=KLQS2X/LQIDXskew;
+  QK1X : QUADRUPOLE, L:=LQIDXskew/2, APERTURE:=RQIDXskew, TILT, K1:=KLQK1X/LQIDXskew;
+  QK2X : QUADRUPOLE, L:=LQIDXskew/2, APERTURE:=RQIDXskew, TILT, K1:=KLQK2X/LQIDXskew;
+  QK3X : QUADRUPOLE, L:=LQIDXskew/2, APERTURE:=RQIDXskew, TILT, K1:=KLQK3X/LQIDXskew;
+  QK4X : QUADRUPOLE, L:=LQIDXskew/2, APERTURE:=RQIDXskew, TILT, K1:=KLQK4X/LQIDXskew;
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! drifts;
+;! ------------------------------------------------------------------------------;
+;
+;! inflector;
+;
+  Xoff := 6.0 ;!6 m offset from DR straight;
+;
+  LSEPQ := 0.8;
+  LQBH1 := 0.5;
+  LBH1Q := 0.5;
+;
+  THETA1 := 2*Akick;
+  THETA2 := THETA1+2*AQM6Rx;
+  THETA3 := THETA2+2*AQM7Rx;
+;
+  LL001 := 0.9231275/COS(THETA1);
+  LL002 := (1.545985-2.6884e-5)/COS(THETA2);
+  LL003 := (0.1478575-2.7009e-5)/COS(THETA3);
+  LL004 := 0.2;
+  LL005 := 0.2;
+  LL006 := LSEPQ;
+  LL007 := LQBH1;
+  LL008 := LBH1Q;
+  LL009 := 0.772500080767;
+  LL010 := 4.106858752466;
+  LL011 := LL009;
+  LL012 := LL008;
+  LL013 := LL007;
+  LL014 := 1.006202919594;
+  LL015 := 0.765038241929;
+  LL016 := 2.071881207043;
+  LL017 := 0.967326240834;
+;
+  L001 : DRIFT, L:=LL001;
+  L002 : DRIFT, L:=LL002;
+  L003 : DRIFT, L:=LL003;
+  L004 : DRIFT, L:=LL004;
+  L005 : DRIFT, L:=LL005;
+  L006 : DRIFT, L:=LL006;
+  L007 : DRIFT, L:=LL007;
+  L008 : DRIFT, L:=LL008;
+  L009 : DRIFT, L:=LL009;
+  L010 : DRIFT, L:=LL010;
+  L011 : DRIFT, L:=LL011;
+  L012 : DRIFT, L:=LL012;
+  L013 : DRIFT, L:=LL013;
+  L014 : DRIFT, L:=LL014;
+  L015 : DRIFT, L:=LL015;
+  L016 : DRIFT, L:=LL016;
+  L017 : DRIFT, L:=LL017;
+;
+;! dummy drifts for skew correction / diagnostic section matching;
+;
+  L1  := 1.25151        ;!90/90 skew correction section FODO cell drift;
+  L2  := 0.834780651873 ;!180/90 skew correction section FODO cell drift;
+  L3  := 0.836794578106 ;!180/90 skew correction section FODO cell drift;
+  L1w := 3.8            ;!90/90 emittance diagnostic section FODO cell drift;
+;
+  L90X   : DRIFT, L:=L1;
+  L180AX : DRIFT, L:=L2;
+  L180BX : DRIFT, L:=L3;
+  LwX    : DRIFT, L:=L1w;
+;
+;! skew correction / diagnostic section;
+;
+  LL101 := 0.480970499736;
+  LL102 := 2.466201477446;
+  LL103 := L1;
+  LL104 := L1;
+  LL105 := L2;
+  LL106 := L3;
+  LL107 := L3;
+  LL108 := L2;
+  LL109 := L1;
+  LL110 := L1+0.93249999586;
+  LL111 := L1w+0.00151-2.555350104758;
+  LL112 := L1w+0.00151/2;
+  LL113 := L1w;
+  LL114 := L1w+0.00151/2;
+;
+  L101 : DRIFT, L:=LL101;
+  L102 : DRIFT, L:=LL102;
+  L103 : DRIFT, L:=LL103;
+  L104 : DRIFT, L:=LL104;
+  L105 : DRIFT, L:=LL105;
+  L106 : DRIFT, L:=LL106;
+  L107 : DRIFT, L:=LL107;
+  L108 : DRIFT, L:=LL108;
+  L109 : DRIFT, L:=LL109;
+  L110 : DRIFT, L:=LL110;
+  L111 : DRIFT, L:=LL111;
+  L112 : DRIFT, L:=LL112;
+  L113 : DRIFT, L:=LL113;
+  L114 : DRIFT, L:=LL114;
+;
+;! drifts for diagnostic and correction devices;
+;
+  dL002e := 0.068-ZV100Rx->L/2 ;!tweak L002e to keep L002d from being negative;
+  L010h  : DRIFT, L:=L010->L/2   ;!split drift at center of inflector;
+  L114s  : DRIFT, L:=3.781       ;!QF21X exit to Cbpm at u/s face of QM16FF ...;
+                               ;! nominal end of EXT, start of FF;
+;
+  L002e : DRIFT, L:=(0.203-dLQTokin3581+dL002e)/COS(THETA2);
+  L002d : DRIFT, L:=(0.068-ZV100Rx->L/2-dL002e)/COS(THETA2);
+  L002c : DRIFT, L:=(0.204-ZH101Rx->L/2-ZV100Rx->L/2)/COS(THETA2);
+  L002a : DRIFT, L:=(0.181-dLQHitachi4-ZH100Rx->L/2)/COS(THETA2);
+  L002b : DRIFT, L:=L002->L-(L002a->L+ZH100Rx->L+ZH101Rx->L+L002c->L+ 
+                  ZV100Rx->L+L002d->L+L002e->L);
+  L005a : DRIFT, L:=L005->L/2;
+  L005b : DRIFT, L:=L005->L-L005a->L;
+  L006d : DRIFT, L:=0.220-QS1X->L-QF1X->L;
+  L006c : DRIFT, L:=0.137-ZV1X->L/2-QS1X->L;
+  L006b : DRIFT, L:=0.152-ZV1X->L/2;
+  L006a : DRIFT, L:=L006->L-(L006b->L+ZV1X->L+L006c->L+2*QS1X->L+L006d->L);
+  L007a : DRIFT, L:=0.024-dLQHitachi5;
+  L007b : DRIFT, L:=0.214;
+  L007c : DRIFT, L:=L007->L-(L007a->L+L007b->L);
+  L008b : DRIFT, L:=0.232-ZV2X->L/2-dLQHitachi5;
+  L008a : DRIFT, L:=L008->L-(ZV2X->L+L008b->L);
+  L009a : DRIFT, L:=0.024-dLQHitachi5;
+  L009b : DRIFT, L:=L009->L-L009a->L;
+  L010a : DRIFT, L:=0.036-dLQHitachi5;
+  L010b : DRIFT, L:=0.196-ZH1X->L/2;
+  L010c : DRIFT, L:=0.261-ZH1X->L/2-ZV3X->L/2;
+  L010d : DRIFT, L:=L010h->L-(L010a->L+L010b->L+ZH1X->L+L010c->L+ZV3X->L);
+  L010e : DRIFT, L:=L010h->L;
+  L011a : DRIFT, L:=0.036-dLQHitachi5;
+  L011b : DRIFT, L:=0.192-ZH2X->L/2;
+  L011d : DRIFT, L:=0.036-dLQHitachi5;
+  L011c : DRIFT, L:=L011->L-(L011a->L+L011b->L+ZH2X->L+L011d->L);
+  L012a : DRIFT, L:=0.231-dLQHitachi5-ZV4X->L/2;
+  L012b : DRIFT, L:=L012->L-(L012a->L+ZV4X->L);
+  L013c : DRIFT, L:=0.024-dLQHitachi5;
+  L013b : DRIFT, L:=0.207-ZV5X->L/2;
+  L013a : DRIFT, L:=L013->L-(ZV5X->L+L013b->L+L013c->L);
+  L014a : DRIFT, L:=0.144-QF6X->L-QS2X->L;
+  L014b : DRIFT, L:=0.344-dLQIDXskew;
+  L014c : DRIFT, L:=L014->L-(L014a->L+2*QS2X->L+L014b->L);
+  L016a : DRIFT, L:=0.036-dLQHitachi2;
+  L016c : DRIFT, L:=0.230-ZH3X->L/2-dLQHitachi5;
+  L016b : DRIFT, L:=L016->L-(L016a->L+ZH3X->L+L016c->L);
+  L017a : DRIFT, L:=0.024-dLQHitachi5;
+  L017b : DRIFT, L:=0.203-ZV6X->L/2;
+  L017c : DRIFT, L:=L017->L-(L017a->L+L017b->L+ZV6X->L);
+;
+  L101c : DRIFT, L:=0.064-dLQHitachi5;
+  L101b : DRIFT, L:=0.207-ZH100X->L/2;
+  L101a : DRIFT, L:=L101->L-(ZH100X->L+L101b->L+L101c->L);
+  L102f : DRIFT, L:=0.241-QK1X->L-QD10X->L;
+  L102e : DRIFT, L:=0.135-dLQIDXskew;
+  L102d : DRIFT, L:=0.095-ZV7X->L/2;
+  L102c : DRIFT, L:=0.453-ZV7X->L/2;
+  L102a : DRIFT, L:=0.224-dLQHitachi5-ZH4X->L/2;
+  L102b : DRIFT, L:=L102->L-(L102a->L+ZH4X->L+L102c->L+ZV7X->L+L102d->L+ 
+                  L102e->L+2*QK1X->L+L102f->L);
+  L103a : DRIFT, L:=0.029-dLQEA;
+  L103c : DRIFT, L:=0.222-ZH5X->L/2-dLQEA;
+  L103b : DRIFT, L:=L103->L-(L103a->L+ZH5X->L+L103c->L);
+  L104a : DRIFT, L:=0.029-dLQEA;
+  L104b : DRIFT, L:=0.403;
+  L104e : DRIFT, L:=0.313-dLQEA;
+  L104d : DRIFT, L:=0.099-ZV8X->L/2;
+  L104c : DRIFT, L:=L104->L-(L104a->L+L104b->L+ZV8X->L+L104d->L+L104e->L);
+  L104g : DRIFT, L:=0.100755;
+  L104f : DRIFT, L:=L104e->L-(2*QK2X->L+L104g->L);
+  L105a : DRIFT, L:=0.029-dLQEA;
+  L105c : DRIFT, L:=0.232-ZH6X->L/2-dLQHitachi4;
+  L105b : DRIFT, L:=L105->L-(L105a->L+ZH6X->L+L105c->L);
+  L106a : DRIFT, L:=0.064-dLQHitachi4;
+  L106b : DRIFT, L:=L106->L-L106a->L;
+  L107a : DRIFT, L:=0.064-dLQHitachi4;
+  L107b : DRIFT, L:=0.276;
+  L107d : DRIFT, L:=0.230-ZH7X->L/2-dLQHitachi4;
+  L107c : DRIFT, L:=L107->L-(L107a->L+L107b->L+ZH7X->L+L107d->L);
+  L108a : DRIFT, L:=0.064-dLQHitachi4;
+  L108b : DRIFT, L:=0.378-ZV9X->L/2;
+  L108c : DRIFT, L:=L108->L-(L108a->L+L108b->L+ZV9X->L);
+  L108e : DRIFT, L:=0.100755;
+  L108d : DRIFT, L:=L108c->L-(2*QK3X->L+L108e->L);
+  L109a : DRIFT, L:=0.029-dLQEA;
+  L109c : DRIFT, L:=0.224-ZH8X->L/2-dLQEA;
+  L109b : DRIFT, L:=L109->L-(L109a->L+ZH8X->L+L109c->L);
+  L110a : DRIFT, L:=0.029-dLQEA;
+  L110b : DRIFT, L:=0.211;
+  L110e : DRIFT, L:=0.322-ZV10X->L/2-dLQEA;
+  L110d : DRIFT, L:=0.761-QK4X->L-ZV10X->L/2;
+  L110c : DRIFT, L:=L110->L-(L110a->L+L110b->L+2*QK4X->L+L110d->L+ZV10X->L+ 
+                  L110e->L);
+  L111a : DRIFT, L:=0.029-dLQEA;
+  L111b : DRIFT, L:=0.276;
+  L111d : DRIFT, L:=0.221-ZH9X->L/2-dLQEA;
+  L111c : DRIFT, L:=L111->L-(L111a->L+L111b->L+ZH9X->L+L111d->L);
+  L112a : DRIFT, L:=0.029-dLQEA;
+  L112b : DRIFT, L:=0.265;
+  L112c : DRIFT, L:=1.244-ZV11X->L/2;
+  L112g : DRIFT, L:=0.029-dLQHitachi2;
+  L112f : DRIFT, L:=0.282;
+  L112e : DRIFT, L:=0.472;
+  L112d : DRIFT, L:=L112->L-(L112a->L+L112b->L+L112c->L+ZV11X->L+L112e->L+ 
+                  L112f->L+L112g->L);
+  L113c : DRIFT, L:=0.425-dLQHitachi2;
+  L113b : DRIFT, L:=0.997-ZH10X->L/2;
+  L113a : DRIFT, L:=L113->L-(ZH10X->L+L113b->L+L113c->L);
+  L114a : DRIFT, L:=0.029-dLQHitachi2;
+  L114b : DRIFT, L:=0.274;
+  L114d : DRIFT, L:=0.282;
+  L114c : DRIFT, L:=L114s->L-(L114a->L+L114b->L+L114d->L);
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! diagnostic and correction devices;
+;! ------------------------------------------------------------------------------;
+;
+;! DR correctors between extraction kicker and septa;
+;
+  ZH100Rx : HKICKER, L:=LTecno59521;
+  ZH101Rx : HKICKER, L:=LTecno59789;
+  ZV100Rx : VKICKER, L:=LZV100R     ;!modified TECNO-58284;
+;
+;! dipole correctors (horizontal);
+;
+  ZH1X   : HKICKER, L:=LTecno58283;
+  ZH2X   : HKICKER, L:=LTecno58283;
+  ZH3X   : HKICKER, L:=LTecno58283;
+  ZH100X : DRIFT, L:=LZH100X     ;!DC substitute for KEX2;
+  ZH4X   : HKICKER, L:=LTecno58283;
+  ZH5X   : HKICKER, L:=LNKKCV;
+  ZH6X   : HKICKER, L:=LTecno58283;
+  ZH7X   : HKICKER, L:=LTecno58283;
+  ZH8X   : HKICKER, L:=LNKKCV;
+  ZH9X   : HKICKER, L:=LNKKCV;
+  ZH10X  : HKICKER, L:=LNKKCH      ;!pulse-to-pulse feedback;
+;
+;! trim winding correctors (horizontal);
+;
+  ZS1X  : MARKER;
+  ZS2X  : MARKER;
+  ZS3X  : MARKER;
+  ZX1X  : HKICKER;
+  ZX2X  : HKICKER;
+  ZX3X  : HKICKER;
+;
+;! dipole correctors (vertical);
+;
+  ZV1X  : VKICKER, L:=LTecno58284;
+  ZV2X  : VKICKER, L:=LTecno58284;
+  ZV3X  : VKICKER, L:=LTecno58284;
+  ZV4X  : VKICKER, L:=LTecno58284;
+  ZV5X  : VKICKER, L:=LTecno58284;
+  ZV6X  : VKICKER, L:=LTecno58284;
+  ZV7X  : VKICKER, L:=LTecno58284;
+  ZV8X  : VKICKER, L:=LTecno58284;
+  ZV9X  : VKICKER, L:=LNKKCV;
+  ZV10X : VKICKER, L:=LTecno58284;
+  ZV11X : VKICKER, L:=LTecno58284 ;!pulse-to-pulse feedback;
+;
+;! special button-type BPMs;
+;
+  MB1X : MONITOR;
+  MB2X : MONITOR;
+;
+;! stripline BPMs;
+;
+  MQF1X  : MONITOR;
+  MQD2X  : MONITOR;
+  MQF3X  : MONITOR;
+  MQF4X  : MONITOR;
+  MQD5X  : MONITOR;
+  MQF6X  : MONITOR;
+  MQF7X  : MONITOR;
+  MQD8X  : MONITOR;
+  MQF9X  : MONITOR;
+  MQF13X : MONITOR;
+  MQD14X : MONITOR;
+  MQF15X : MONITOR;
+;
+;! cavity BPMs;
+;
+  MQD10X  : MONITOR ;!C-band;
+  MQF11X  : MONITOR ;!C-band;
+  MQD12X  : MONITOR ;!C-band;
+  MQD16X  : MONITOR ;!C-band;
+  MQF17X  : MONITOR ;!C-band;
+  MQD18X  : MONITOR ;!C-band;
+  MQF19X  : MONITOR ;!C-band;
+  MQD20X  : MONITOR ;!C-band;
+  MQF21X  : MONITOR ;!C-band;
+;
+;! reference (monopole) cavity (for cavity BPMs);
+;
+  MREF1X : MARKER ;!C-band (for QBPMs);
+;
+;! screen monitors;
+;
+  MS1X : MONITOR ;!length ~0.18;
+;
+;! filament wire scanners;
+;
+  MW0X : MONITOR ;!length ~0.18;
+  MW1X : MONITOR ;!length ~0.18;
+  MW2X : MONITOR ;!length ~0.18;
+  MW3X : MONITOR ;!length ~0.18;
+  MW4X : MONITOR ;!length ~0.18;
+;
+;! beam size monitors (BSMs);
+;
+  OTR1X : MONITOR ;!SLAC OTR monitor (length ~0.3 including bellows at each end);
+;
+;! laserwire;
+;
+  LW1X : MONITOR ;!development laserwire system for measuring 1 um spot size;
+;
+;! beam charge/current monitors;
+;
+  ICT1X : MARKER ;!ICT;
+;
+;! FONT devices;
+;
+  FONTK1 : MARKER ;!vertical kicker;
+  FONTP1 : MARKER ;!pickup;
+  FONTK2 : MARKER ;!vertical kicker;
+  FONTP2 : MARKER ;!pickup;
+  FONTP3 : MARKER ;!pickup;
+;
+;! unidentified diagnostic devices;
+;
+  UDDX1 : MARKER;
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! marker points;
+;! ------------------------------------------------------------------------------;
+;
+  IP01   : MARKER;
+  COLL   : MARKER;
+  MID    : MARKER;
+  IP02   : MARKER;
+  MDISP  : MARKER;
+  MSKEW  : MARKER;
+  MEMIT  : MARKER;
+  FIT180 : MARKER;
+;
+;! :=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=:=;
+;! beamlines;
+;! ------------------------------------------------------------------------------;
+;! C90   : 90/90 degree skew correction section FODO;
+;! C180  : 180/90 degree skew correction section FODO (matched to C90);
+;! C72   : 72/72 degree emittance diagnostic section FODO;
+;! DIAG  : skew correction section + emittance diagnostic section;
+;! EXT0  : asymmetric -I(x) inflector plus skew correction / diagnostic section;
+;! EXTs  : simple EXT line;
+;! EXTRs : simple EXT line (reversed);
+;! EXT   : complete EXT line;
+;! ------------------------------------------------------------------------------;
+;
+  C90  : LINE:=(QD90X,L90X,QF90X,QF90X,L90X,QD90X);
+  C180 : LINE:=(
+    QD90X,L180AX,QF180X,QF180X,L180BX,QD180X,FIT180,
+    QD180X,L180BX,QF180X,QF180X,L180AX,QD90X);
+  C72  : LINE:=(QDwX,LwX,QFwX,QFwX,LwX,QDwX);
+  DIAG : LINE:=(
+    QD90X,L90X,QF90X,QF90X,L90X,QD90X,
+    QD90X,L180AX,QF180X,QF180X,L180BX,QD180X,FIT180,
+    QD180X,L180BX,QF180X,QF180X,L180AX,QD90X,
+    QD90X,L90X,QF90X,QF90X,L110,QD18X,
+    QD18X,L111,QF19X,QF19X,L112,QD20X,
+    QD20X,LwX,QF21X,QF21X,LwX,QDwX,MEMIT);
+;
+  EXT0 : LINE:=(
+    KEX1a,IP01,KEX1b,L001,
+    QM6Rx,QM6Rx,L002,
+    QM7Rx,QM7Rx,L003,
+    BS1Xa,BS1Xb,L004,
+    BS2Xa,BS2Xb,L005,
+    BS3Xa,BS3Xb,L006,
+    QF1X,QF1X,L007,
+    BH1Xa,BH1Xb,L008,
+    QD2X,QD2X,L009,
+    QF3X,QF3X,L010h,MID,L010h,
+    QF4X,QF4X,L011,
+    QD5X,QD5X,L012,
+    BH2Xa,BH2Xb,L013,
+    QF6X,QF6X,L014,
+    BH3Xa,BH3Xb,L015,
+    QF7X,QF7X,L016,
+    QD8X,QD8X,L017,
+    KEX2a,IP02,KEX2b,MDISP,L101,
+    QF9X,QF9X,L102,
+    QD90X,MSKEW,QD90X,L90X,
+    QF90X,QF90X,L90X,
+    QD90X,QD90X,L180AX,
+    QF180X,QF180X,L180BX,
+    QD180X,FIT180,QD180X,L180BX,
+    QF180X,QF180X,L180AX,
+    QD90X,QD90X,L90X,
+    QF90X,QF90X,L110,
+    QD18X,QD18X,L111,
+    QF19X,QF19X,LwX,
+    QDwX,MEMIT,QDwX,LwX,
+    QFwX,QFwX,LwX,
+    QDwX);
+;
+  EXTs : LINE:=(
+    KEX1a,IP01,KEX1b,L001,
+    QM6Rx,QM6Rx,L002,
+    QM7Rx,QM7Rx,L003,
+    BS1Xa,BS1Xb,L004,
+    BS2Xa,BS2Xb,L005,
+    BS3Xa,BS3Xb,L006,
+    QF1X,QF1X,L007,
+    BH1Xa,BH1Xb,L008,
+    QD2X,QD2X,L009,
+    QF3X,QF3X,L010h,MID,L010h,
+    QF4X,QF4X,L011,
+    QD5X,QD5X,L012,
+    BH2Xa,BH2Xb,L013,
+    QF6X,QF6X,L014,
+    BH3Xa,BH3Xb,L015,
+    QF7X,QF7X,L016,
+    QD8X,QD8X,L017,
+    KEX2a,IP02,KEX2b,MDISP,L101,
+    QF9X,QF9X,L102,
+    QD10X,MSKEW,QD10X,L103,
+    QF11X,QF11X,L104,
+    QD12X,QD12X,L105,
+    QF13X,QF13X,L106,
+    QD14X,FIT180,QD14X,L107,
+    QF15X,QF15X,L108,
+    QD16X,QD16X,L109,
+    QF17X,QF17X,L110,
+    QD18X,QD18X,L111,
+    QF19X,QF19X,L112,
+    QD20X,MEMIT,QD20X,L113,
+    QF21X,QF21X,L114s);
+;
+  EXTRs : LINE:=(
+    L114s,QF21X,QF21X,
+    L113,QD20X,MEMIT,QD20X,
+    L113,QD20X,MEMIT,QD20X,
+    L112,QF19X,QF19X,
+    L111,QD18X,QD18X,
+    L110,QF17X,QF17X,
+    L109,QD16X,QD16X,
+    L108,QF15X,QF15X,
+    L107,QD14X,FIT180,QD14X,
+    L106,QF13X,QF13X,
+    L105,QD12X,QD12X,
+    L104,QF11X,QF11X,
+    L103,QD10X,MSKEW,QD10X,
+    L102,QF9X,QF9X,
+    L101,MDISP,KEX2a,IP02,KEX2b,
+    L017,QD8X,QD8X,
+    L016,QF7X,QF7X,
+    L015,BH3Xa,BH3Xb,
+    L014,QF6X,QF6X,
+    L013,BH2Xa,BH2Xb,
+    L012,QD5X,QD5X,
+    L011,QF4X,QF4X,
+    L010h,MID,L010h,QF3X,QF3X,
+    L009,QD2X,QD2X,
+    L008,BH1Xa,BH1Xb,
+    L007,QF1X,QF1X,
+    L006,BS3Xa,BS3Xb,
+    L005,BS2Xa,BS2Xb,
+    L004,BS1Xa,BS1Xb,
+    L003,QM7Rx,QM7Rx,
+    L002,QM6Rx,QM6Rx,
+    L001,KEX1a,IP01,KEX1b);
+;
+  BL002 : LINE:=(L002a,ZH100Rx,L002b,ZH101Rx,L002c,ZV100Rx,L002d,MB1X,L002e);
+  BL005 : LINE:=(L005a,MB2X,L005b);
+  BL006 : LINE:=(L006a,OTR1X,L006b,ZV1X,L006c,QS1X,QS1X,L006d);
+  BL007 : LINE:=(L007a,MQF1X,L007b,MS1X,L007c);
+  BL008 : LINE:=(L008a,ZV2X,L008b);
+  BL009 : LINE:=(L009a,MQD2X,L009b);
+  BL010 : LINE:=(L010a,MQF3X,L010b,ZH1X,L010c,ZV3X,L010d,MID,L010e);
+  BL011 : LINE:=(L011a,MQF4X,L011b,ZH2X,L011c,MQD5X,L011d);
+  BL012 : LINE:=(L012a,ZV4X,L012b);
+  BL013 : LINE:=(L013a,ZV5X,L013b,MQF6X,L013c);
+  BL014 : LINE:=(L014a,QS2X,QS2X,L014b,UDDX1,L014c);
+  BL016 : LINE:=(L016a,MQF7X,L016b,ZH3X,L016c);
+  BL017 : LINE:=(L017a,MQD8X,L017b,ZV6X,L017c);
+;
+  BL101 : LINE:=(L101a,ZH100X,L101b,MQF9X,L101c);
+  BL102 : LINE:=(L102a,ZH4X,L102b,FONTK1,L102c,ZV7X,L102d,FONTP1,L102e,QK1X,
+                QK1X,L102f);
+  BL103 : LINE:=(L103a,MQD10X,L103b,ZH5X,L103c);
+  BL104 : LINE:=(L104a,MQF11X,L104b,FONTK2,L104c,ZV8X,L104d,FONTP2,L104f,
+                QK2X,QK2X,L104g);
+  BL105 : LINE:=(L105a,MQD12X,L105b,ZH6X,L105c);
+  BL106 : LINE:=(L106a,MQF13X,L106b);
+  BL107 : LINE:=(L107a,MQD14X,L107b,FONTP3,L107c,ZH7X,L107d);
+  BL108 : LINE:=(L108a,MQF15X,L108b,ZV9X,L108d,QK3X,QK3X,L108e);
+  BL109 : LINE:=(L109a,MQD16X,L109b,ZH8X,L109c);
+  BL110 : LINE:=(L110a,MQF17X,L110b,MREF1X,L110c,QK4X,QK4X,L110d,ZV10X,L110e);
+  BL111 : LINE:=(L111a,MQD18X,L111b,MW0X,L111c,ZH9X,L111d);
+  BL112 : LINE:=(L112a,MQF19X,L112b,MW1X,L112c,ZV11X,L112d,LW1X,
+                L112e,MW2X,L112f,MQD20X,L112g);
+  BL113 : LINE:=(L113a,ZH10X,L113b,ICT1X,L113c);
+  BL114 : LINE:=(L114a,MQF21X,L114b,MW3X,L114c,MW4X,L114d);
+;
+  EXT : LINE:=(
+    KEX1a,IP01,KEX1b,L001,
+    QM6Rx,QM6Rx,BL002,
+    QM7Rx,QM7Rx,L003,
+    BS1Xa,ZS1X,BS1Xb,L004,
+    BS2Xa,ZS2X,BS2Xb,BL005,
+    BS3Xa,ZS3X,BS3Xb,BL006,
+    QF1X,QF1X,BL007,
+    BH1Xa,ZX1X,BH1Xb,BL008,
+    QD2X,QD2X,BL009,
+    QF3X,QF3X,BL010,
+    QF4X,QF4X,BL011,
+    QD5X,QD5X,BL012,
+    BH2Xa,ZX2X,BH2Xb,BL013,
+    QF6X,QF6X,BL014,
+    BH3Xa,ZX3X,BH3Xb,L015,
+    QF7X,QF7X,BL016,
+    QD8X,QD8X,BL017,
+    KEX2a,IP02,KEX2b,
+    MDISP,BL101,
+    QF9X,QF9X,BL102,
+    QD10X,MSKEW,QD10X,BL103,
+    QF11X,QF11X,BL104,
+    QD12X,QD12X,BL105,
+    QF13X,QF13X,BL106,
+    QD14X,FIT180,QD14X,BL107,
+    QF15X,QF15X,BL108,
+    QD16X,QD16X,BL109,
+    QF17X,QF17X,BL110,
+    QD18X,QD18X,BL111,
+    QF19X,QF19X,BL112,
+    QD20X,MEMIT,QD20X,BL113,
+    QF21X,QF21X,BL114);
+;
+;! ------------------------------------------------------------------------------;
+;
+  ;
