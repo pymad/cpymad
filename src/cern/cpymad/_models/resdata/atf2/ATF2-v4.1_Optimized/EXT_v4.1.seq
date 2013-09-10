@@ -61,9 +61,6 @@
   LQM6Rx := LQHitachi4 *(AQM6Rx/SIN(AQM6Rx))+0.000004 ;!Hitachi-4 (0.18 core);
   LQM7Rx := LQTokin3581*(AQM7Rx/SIN(AQM7Rx))+0.000004 ;!Tokin-3581 (0.06 core);
 ;
-  KLQM6R := -0.71174 ;!drdsgn07Dec03;
-  KLQM7R :=  0.40822 ;!drdsgn07Dec03;
-;
   QM6Rx : SBEND, L:=LQM6Rx/2, ANGLE:=AQM6Rx, K1:=KLQM6R/LQM6Rx, 
                 FINT:=0, FINTX:=0;
   QM7Rx : SBEND, L:=LQM7Rx/2, ANGLE:=AQM7Rx, K1:=KLQM7R/LQM7Rx, 
@@ -117,14 +114,6 @@
 ;
 ;! inflector;
 ;
-  KLQF1X  :=  1.07348422932;
-  KLQD2X  := -0.941224656296;
-  KLQF3X  :=  0.669156110054;
-  KLQF4X  :=  0.680204174589;
-  KLQD5X  := -0.926978428159;
-  KLQF6X  :=  1.128310169236;
-  KLQF7X  :=  0.389515329321;
-  KLQD8X  := -0.589621808552;
 ;
   QF1X : QUADRUPOLE, L:=LQHitachi5/2,  APERTURE:=RQHitachi5,  K1:=KLQF1X/LQHitachi5;
   QD2X : QUADRUPOLE, L:=LQHitachi5/2,  APERTURE:=RQHitachi5,  K1:=KLQD2X/LQHitachi5;
@@ -137,12 +126,6 @@
 ;
 ;! dummy quadrupoles for skew correction / diagnostic section matching;
 ;
-  KLQF90  :=  1.0233313538;
-  KLQD90  := -KLQF90;
-  KLQF180 :=  1.368238897325;
-  KLQD180 := -1.015436469912;
-  KLQFw   :=  0.305157098259;
-  KLQDw   := -KLQFw;
 ;
   QF90X  : QUADRUPOLE, L:=LQEA/2,       APERTURE:=RQEA,       K1:=KLQF90/LQEA;
   QD90X  : QUADRUPOLE, L:=LQEA/2,       APERTURE:=RQEA,       K1:=KLQD90/LQEA;
@@ -153,19 +136,6 @@
 ;
 ;! skew correction / diagnostic section;
 ;
-  KLQF9X  :=  0.735408941061;
-  KLQD10X := -1.023596398709 ;!KLQD90;
-  KLQF11X :=  KLQF90;
-  KLQD12X :=  KLQD90;
-  KLQF13X :=  KLQF180;
-  KLQD14X :=  KLQD180;
-  KLQF15X :=  KLQF180;
-  KLQD16X :=  KLQD90;
-  KLQF17X :=  KLQF90;
-  KLQD18X := -0.686072135611 ;!KLQDw;
-  KLQF19X :=  0.655166040943 ;!KLQFw;
-  KLQD20X := -0.302269728416 ;!KLQDw;
-  KLQF21X :=  0.301425825497 ;!KLQFw;
 ;
   QF9X  : QUADRUPOLE, L:=LQHitachi5/2, APERTURE:=RQHitachi5, K1:=KLQF9X/LQHitachi5;
   QD10X : QUADRUPOLE, L:=LQEA/2,       APERTURE:=RQEA,       K1:=KLQD10X/LQEA;
@@ -180,17 +150,6 @@
   QF19X : QUADRUPOLE, L:=LQEA/2,       APERTURE:=RQEA,       K1:=KLQF19X/LQEA;
   QD20X : QUADRUPOLE, L:=LQHitachi2/2, APERTURE:=RQHitachi2, K1:=KLQD20X/LQHitachi2;
   QF21X : QUADRUPOLE, L:=LQHitachi2/2, APERTURE:=RQHitachi2, K1:=KLQF21X/LQHitachi2;
-;
-;! skew quadrupoles;
-;! (NOTE: QK2X and QK3X are not installed);
-;
-  KLQSnX := 0 ;!1.E-6;
-  KLQS1X := KLQSnX;
-  KLQS2X := KLQSnX;
-  KLQK1X := 0 ;!1.E-6;
-  KLQK2X := 0 ;!1.E-6;
-  KLQK3X := 0 ;!1.E-6;
-  KLQK4X := 0 ;!1.E-6;
 ;
   QS1X : QUADRUPOLE, L:=LQIDXskew/2, APERTURE:=RQIDXskew, TILT, K1:=KLQS1X/LQIDXskew;
   QS2X : QUADRUPOLE, L:=LQIDXskew/2, APERTURE:=RQIDXskew, TILT, K1:=KLQS2X/LQIDXskew;

@@ -3,3 +3,11 @@
   ATF2   : LINE:=(EXT,FF);
   ATF2d  : LINE:=(EXT,FF,POST);
   myATF2 : LINE=(MLinv,EXT,FFs);
+
+! convert lines to sequences..
+beam, particle=electron, energy=1.3;
+use,sequence=ATF2s;
+use,sequence=ATF2ds;
+use,sequence=ATF2;
+use,sequence=ATF2d;
+use,sequence=myATF2;
