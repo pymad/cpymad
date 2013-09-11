@@ -87,6 +87,11 @@
             "location": "RESOURCE",
             "path": "ATF2-v4.1_Optimized/FF_v4.1.str"
           },
+	  {
+            "parse": "STRENGTHS",
+	    "location": "RESOURCE",
+	    "path": "ATF2-v4.1_Optimized/matchline.str"
+	  },
           {
             "parse": "STRENGTHS",
             "location": "RESOURCE",
