@@ -19,6 +19,10 @@
 # NOTE: Do not inherit from unittest.TestCase, otherwise unittest will try
 # to invoke all the test_xxx methods which makes no sense for this base
 # class.
+
+from __future__ import print_function
+
+
 class TestCpymad(object):
 
     # It's a bit surprising that this doesn't happen by itself.. Hmmm...
@@ -43,6 +47,10 @@ class TestCpymad(object):
         for seq in self.model.mdef['sequences']:
             print("Testing sequence",seq)
             self.assertTrue(self.model.has_sequence(seq))
+            # check that each sequence has a default twiss that works:
+            t,p=self.model.twiss(sequence=seq)
+            for attr in ['betx','bety','s']:
+                self.assertTrue(hasattr(t,attr))
 
     def test_set_optic(self):
         '''
@@ -51,6 +59,11 @@ class TestCpymad(object):
         for optic in self.model.list_optics():
             print("Testing optics",optic)
             self.model.set_optic(optic)
-            self.assertEqual(optic,self.model._active['optic'])
-            self.model.twiss()
+            for sequence in self.model.mdef['sequences']:
+                print(" ..for sequence",sequence)
+                self.model.set_sequence(sequence)
+                self.assertEqual(optic,self.model._active['optic'])
+                t,p=self.model.twiss()
+                for attr in ['betx','bety','s']:
+                    self.assertTrue(hasattr(t,attr))
 
