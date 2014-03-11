@@ -341,6 +341,10 @@ class Model(abc.model.PyMadModel):
                 raise ValueError('twiss initial conditions with name '+name+' not found in range '+madrange)
             return rangedict['twiss-initial-conditions'][name]
         else:
+            # In this case there is only one twiss initial conditions:
+            if 'default-twiss' not in rangedict:
+                return rangedict['twiss-initial-conditions']
+            # There could be several initial conditions defined, we return the default:
             return rangedict['twiss-initial-conditions'][rangedict['default-twiss']]
 
 
