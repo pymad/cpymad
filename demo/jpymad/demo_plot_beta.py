@@ -16,7 +16,7 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 from matplotlib import pyplot as plt
-import pymad as pm
+from cern.jpymad as JPyMadService
 
 def plot_beta(model, postfix=''):
     # Run twiss on the model, optionally give name of file
@@ -32,27 +32,17 @@ def plot_beta(model, postfix=''):
     plt.savefig('beta' + postfix + '.eps')
 
 
-# choose the mode
-mode = 'jpymad'
-#mode = 'jpymad'
-
-# some hacks for the moment:
-# we have not the same model definitions in both implementations at the moment
-if mode is 'jpymad':
-    mdefname = 'LHC (LSA)'
-    opticname = 'A55C55A1000L500_0.00900_2011'
-else:
-    mdefname = '???'
-    opticname = 'collision'
+mdefname = 'LHC (LSA)'
+opticname = 'A55C55A1000L500_0.00900_2011'
 
 #
 # Here it starts
 #
 # create the service
-pms = pm.init(mode)
+pms = JPyMadService()
 
 # print the name of all model definitions
-print pms.mdefnames
+print(pms.mdefnames)
 
 # alternatively use convenience function
 #pm.ls_mdefs()
@@ -69,12 +59,12 @@ model = pms.create_model(mdef)
 pm.ls_models()
 
 # print a list of available sequences:
-print mdef.seqnames
+print(mdef.seqnames)
 
 plot_beta(model, '_inj')
 
 # list the available optics and set a new one
-print mdef.opticnames
+print(mdef.opticnames)
 model.set_optic(opticname)
 
 plot_beta(model, '_coll')

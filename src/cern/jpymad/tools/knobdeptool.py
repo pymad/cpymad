@@ -46,17 +46,17 @@ class KnobDepTool():
             self._knob.setOffset(float(paramvalue))
             twresult, params = self._model.twiss(columns, elementpatterns)
 
-            if data == None:
+            if data is None:
                 data = Data()
                 data.name = np.array(twresult['name'])
                 data.s = np.array(twresult['s'])
                 data.paramrange = paramrange
                 for madxvar in madxvars:
-                    #print madxvar + ": len=" + len(twresult[madxvar])
+                    #print(madxvar + ": len=" + len(twresult[madxvar]))
                     setattr(data, madxvar, np.array([twresult[madxvar]]))
             else:
                 for madxvar in madxvars:
-                    #print madxvar + ": len=" + len(twresult[madxvar])
+                    #print(madxvar + ": len=" + len(twresult[madxvar]))
                     setattr(data, madxvar, np.append(getattr(data, madxvar), \
                                      np.array([twresult[madxvar]]), axis=0))
 

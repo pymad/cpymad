@@ -19,12 +19,11 @@ import unittest
 from cern import cpymad
 from base_test import TestCpymad
 
-class TestILC(TestCpymad):
+class TestILC(TestCpymad, unittest.TestCase):
     def setUp(self):
         self.model=cpymad.model('ilc')
         self.model._cmd('option,-twiss_print')
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestILC)
-    unittest.TextTestRunner(verbosity=1).run(suite)
+    unittest.main()
 

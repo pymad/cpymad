@@ -22,13 +22,15 @@ Created on Nov 11, 2010
 
 @author: kaifox
 '''
+from __future__ import absolute_import
 
 # py4j for communicating with jmad
 from cern.pymad.abc import PyMadService
 
-from modeldef import JPyMadModelDefinition
-from model import JPyMadModel
-import jmad as jm
+from .modeldef import JPyMadModelDefinition
+from .model import JPyMadModel
+from . import jmad as jm
+
 import atexit
 
 
@@ -44,7 +46,7 @@ class JPyMadService(PyMadService):
         # YIL edit: What about this?
         atexit.register(self.cleanup)
         for key, value in kwargs.items():
-            print "WARN: unhandled option '" + key + "' for JPyMandService. Ignoring it."
+            print("WARN: unhandled option '" + key + "' for JPyMandService. Ignoring it.")
 
         if not start is None:
             if start is "gui":
@@ -52,7 +54,7 @@ class JPyMadService(PyMadService):
             elif start is "service":
                 self._started_jmad = jm.start_pymadservice(jmadhome)
             else:
-                print "WARN: unhandled start='" + start + "' for JPymandService (start can be one of 'gui' or 'service'). Ignoring it."
+                print("WARN: unhandled start='" + start + "' for JPymandService (start can be one of 'gui' or 'service'). Ignoring it.")
 
         self.jmad_service = jm.connect()
 
@@ -85,14 +87,14 @@ class JPyMadService(PyMadService):
     def create_model(self, mdef):
         if  isinstance(mdef, str):
             model_definition = self.get_mdef(mdef)
-            if model_definition == None:
+            if model_definition is None:
                 raise Exception("Model definition '" + mdef + "' not found.")
         else:
             model_definition = mdef
 
         jmm = self.jmad_service.createModel(model_definition.jmmd)
         jmm.init()
-        print jm.stop
+        print(jm.stop)
         return JPyMadModel(jmm)
 
     def delete_model(self, model):
@@ -105,7 +107,7 @@ class JPyMadService(PyMadService):
         """
         model_manager = self.jmad_service.getModelManager()
         active_model = model_manager.getActiveModel()
-        if active_model == None:
+        if active_model is None:
             return None
         else:
             return JPyMadModel(active_model)
@@ -116,6 +118,6 @@ class JPyMadService(PyMadService):
         model_manager.setActiveModel(pymadmodel.jmm)
 
     def cleanup(self):
-        if (self._started_jmad == True):
+        if self._started_jmad:
             jm.stop()
 

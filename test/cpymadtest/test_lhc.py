@@ -19,12 +19,11 @@ import unittest
 from cern import cpymad
 from base_test import TestCpymad
 
-class TestLHC_LSA(TestCpymad):
+class TestLHC_LSA(TestCpymad, unittest.TestCase):
     def setUp(self):
         self.model=cpymad.model('lhc')
         self.model._cmd('option,-twiss_print')
 
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestLHC_LSA)
-    unittest.TextTestRunner(verbosity=1).run(suite)
+    unittest.main()
 

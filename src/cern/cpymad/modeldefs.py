@@ -1,5 +1,5 @@
 
-import json
+from yaml import safe_dump as dump, safe_load as load
 
 
 
@@ -9,7 +9,7 @@ class modeldef():
     '''
     def __init__(self,modelfile,modelname):
 
-        self._dict=json.load(file(modelfile,'r'))[modelname]
+        self._dict=load(open(modelfile,'r'))[modelname]
         self.name=modelname
 
         self._init_attr('sequences')
@@ -19,7 +19,7 @@ class modeldef():
         '''
          Returns the sequence definition as a dictionary..
         '''
-        if not sequence in self.sequences.keys():
+        if sequence not in self.sequences:
             raise ValueError("Sequence %s is not in the model" % sequence)
         return self.sequences[sequence].copy()
 
@@ -39,8 +39,8 @@ class modeldef():
 
     def save_model(self,filename):
         out_dict={self.name: self._dict}
-        out_text=json.dumps(out_dict,indent=2)
-        file(filename,'w').write(out_text)
+        out_text=dump(out_dict)
+        open(filename,'w').write(out_text)
 
     def copy(self):
         return self._dict.copy()
