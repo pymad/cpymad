@@ -1,5 +1,6 @@
 
-import json,os
+import os
+from yaml import safe_dump as dump, safe_load as load
 
 # some fixed conversions:
 _VALUE_MAP = {'true' : True, 'false' : False, 'PLUS': 1, 'MINUS': -1}
@@ -23,13 +24,13 @@ def _try_float_convert(value):
         return None
 
 def _convert_value(value):
-    if _VALUE_MAP.has_key(value):
+    if value in _VALUE_MAP:
         return _VALUE_MAP[value]
-    
+
     newval = _try_float_convert(value)
-    if not newval == None:
+    if newval is not None:
         return newval
-    
+
     return value
 
 def _convert_dict_keep_parent(newdict,value,thiskey):
@@ -61,7 +62,7 @@ def _convert_recursively(item):
                 newlist.append(_convert_recursively(nextItem));
             return newlist
     elif isinstance(item, dict):
-        newdict = {}    
+        newdict = {}
         for key, value in item.items():
             thiskey=_convert_key(key)
             if '@name' in value and thiskey in _NAME_CONVERT_LIST:
@@ -88,6 +89,7 @@ def _add_default_cpymads(new_dict):
     '''
     for mname,model in new_dict.items():
         model['dbdirs']=['/afs/cern.ch/eng/']
+        model['real']=True
         for seqname,sequence in model['sequences'].items():
             sequence['aperfiles']=[]
 
@@ -108,7 +110,7 @@ def _move_beams(new_dict):
             sequence['beam']=mname+'_'+seqname
             for r in sequence['ranges']:
                 if 'default-twiss' not in sequence['ranges'][r]:
-                    sequence['ranges'][r]['default-twiss']=sequence['ranges'][r]['twiss-initial-conditions'].keys()[0]
+                    sequence['ranges'][r]['default-twiss']=list(sequence['ranges'][r]['twiss-initial-conditions'].keys())[0]
 
 def convert_dict(indict):
     '''
@@ -120,18 +122,19 @@ def convert_dict(indict):
     return new_dict
 
 def convert_file(infilename, outfilename):
-    indict = json.loads(file(infilename, 'r').read())
-    outdict = convert_dict(indict);
-    file(outfilename, 'w').write(json.dumps(outdict, indent=2))
+    with open(infilename, 'rt') as f:
+        indict = load(f)
+    with open(outfilename, 'wt') as f:
+        dump(convert_dict(indict), f)
 
 if __name__ == "__main__":
     skip=['lhc','longti8']
     for f in os.listdir('.'):
         if f[-9:]=='.jmd.json' and f[:-9] not in skip:
             print("Converting "+f[:-9])
-            convert_file(f, '../_models/'+f[:-9]+'.cpymad.json')
-            
+            convert_file(f, '../_models/'+f[:-9]+'.cpymad.yml')
+
             # saving jmad file in pretty print format:
-            #jd=json.load(file(f,'r'))
-            #json.dump(jd,file(f,'w'),indent=2)
-    
+            #jd=json.load(open(f,'r'))
+            #json.dump(jd,open(f,'w'),indent=2)
+

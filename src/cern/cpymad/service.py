@@ -1,14 +1,14 @@
 #-------------------------------------------------------------------------------
 # This file is part of PyMad.
-# 
+#
 # Copyright (c) 2011, CERN. All rights reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 # 	http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,43 +20,63 @@ Created on 16 Aug 2011
 
 .. moduleauthor:: Yngve Inntjore Levinsen <Yngve.Inntjore.Levinsen[at]cern.ch>
 '''
+from __future__ import absolute_import
+
 from cern.pymad.abc.service import PyMadService
-from cern import cpymad
+
+from .model import Model
+from .model_locator import ChainModelLocator
+
+
+# Create a default ModelLocator:
+# NOTE: we could (and probably should) stop using this global object and
+# use only CpymadService objects instead!
+from .model_locator import MergedModelLocator
+from cern.resource.package import PackageResource
+
+_locator = MergedModelLocator(PackageResource(__package__, '_models'))
+
+default_model_locator = ChainModelLocator()
+default_model_locator.add_locator(_locator)
+
 
 
 class CpymadService(PyMadService):
     ''' The CPymad implementation of the
         abstract class PyMadService. '''
-    
-    def __init__(self, **kwargs):
+
+    def __init__(self, model_locator=default_model_locator, **kwargs):
         self._am=None
         self._models=[]
+        self.model_locator = model_locator
         for key, value in kwargs.items():
-            print "WARN: unhandled option '" + key + "' for CPyMandService. Ignoring it." 
-    
+            print("WARN: unhandled option '" + key + "' for CPyMandService. Ignoring it.")
+
+
     @property
     def mdefs(self):
-        return cpymad.modelList()
-    
+        return self.model_locator.list_models()
+
     @property
     def mdefnames(self):
         return self.mdefs
-    
+
     @property
     def models(self):
         mnames=[]
         for m in self._models:
             mnames.append(str(m))
         return mnames
-    
+
     def create_model(self, modeldef):
-        self._models.append(cpymad.model(modeldef))
+        self._models.append(
+            Model(self.model_locator.get_model(modeldef)))
         self._am=self._models[-1]
         return self._am
-    
+
     def am(self):
         return self._am
-    
+
     def delete_model(self,model):
         '''
          The cpymad implementation of this is to simply
