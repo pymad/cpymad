@@ -1,14 +1,14 @@
 #-------------------------------------------------------------------------------
 # This file is part of PyMad.
-# 
+#
 # Copyright (c) 2011, CERN. All rights reserved.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 # 	http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,9 +20,11 @@ Created on Nov 17, 2010
 
 @author: kaifox
 '''
+from __future__ import absolute_import
+
 import unittest
 
-from utils import PyMadTestCase
+from .utils import PyMadTestCase
 from jpymad.globals import JPyMadGlobals
 
 class Test(unittest.TestCase):
@@ -33,7 +35,7 @@ class Test(unittest.TestCase):
         self.assertTrue(not JPyMadGlobals.java_gateway is None, 'Must be connected to a java_gateway')
         self.assertTrue(not pms.jmad_service is None, 'JMad service must be available')
         for mdef in pms.mdefs:
-            print mdef
+            print(mdef)
 
 
 if __name__ == "__main__":
