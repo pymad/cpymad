@@ -1,3 +1,11 @@
+**WARNING:** This project is currently **unmaintained**! Please consider using
+the active fork at:
+
+    https://github.com/hibtc/cpymad
+
+See also `Project status`_.
+
+
 CPyMAD
 ------
 
@@ -78,15 +86,15 @@ See http://pymad.github.io/cpymad for further documentation.
 Project Status
 ~~~~~~~~~~~~~~
 
-There are currently no active developers working on this project. At the moment the code is still working
-fine against the current stable and development version of Mad-X, so it should still be useful.
+There are currently no active developers working on this project. The code might still be working
+fine against the current stable and development version of Mad-X, so it could still be useful.
 Below you find a list of alternative projects which may have a more complete feature set and documentation.
 
 **Known Forks and Similar Projects:**
- - https://github.com/hibtc/cpymad
- - http://jmad.web.cern.ch/jmad/
- - https://github.com/pymad/jpymad
- 
+ - https://github.com/hibtc/cpymad (python binding to MAD-X using C extension)
+ - http://jmad.web.cern.ch/jmad/ (java binding to MAD-X)
+ - https://github.com/pymad/jpymad (python -> jmad -> MAD-X)
+
 
 Development guidelines
 ~~~~~~~~~~~~~~~~~~~~~~
